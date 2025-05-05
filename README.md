@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Management App
 
-## Getting Started
+A full-featured task management application built with Next.js, Express, Tailwind CSS, and shadcn/ui. Features include role-based authentication, real-time notifications, task assignment, and comprehensive analytics.
 
-First, run the development server:
+## ✨ Features
 
+### 🔐 Authentication
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- User registration and login
+- JWT token-based authentication
+- Role-based access control (Admin/User)
+- Protected routes
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Create tasks with title, description, priority, due date
+- Assign tasks to team members
+- Update task status (Todo/In Progress/Done/Canceled)
+- Filter tasks by status, priority, or search
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Real-time task assignment alerts
+- Audible notification sounds
+- Notification history log
+- Mark as read functionality
 
-## Learn More
+- Next.js 14 (App Router)
+- React 18
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components
+- Axios for API calls
+- React Hook Form + Zod for forms
+- WebSockets for real-time updates
 
-To learn more about Next.js, take a look at the following resources:
+- Express.js
+- MongoDB (with Mongoose)
+- JSON Web Tokens (JWT)
+- Socket.io for real-time notifications
+- Bcrypt for password hashing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🌐 API Endpoints
+Endpoint	Method	Description	Access
+/api/auth/register	POST	Register new user	Public
+/api/auth/login	POST	User login	Public
+/api/tasks	GET	Get all tasks	Admin
+/api/tasks	POST	Create new task	Admin
+/api/tasks/user	GET	Get user's tasks	User
+/api/tasks/:id	PATCH	Update task status	User
+/api/users	GET	Get all users	Admin
+/api/notifications	GET	Get user notifications	User
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+🤝 Contributing
+Fork the Project
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create your Feature Branch (git checkout -b feature/AmazingFeature)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Commit your Changes (git commit -m 'Add some AmazingFeature')
+
+Push to the Branch (git push origin feature/AmazingFeature)
+
+Open a Pull Request
+
+📜 License
+Distributed under the MIT License. See LICENSE for more information.
