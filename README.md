@@ -5,7 +5,7 @@ A full-featured task management application built with Next.js, Express, Tailwin
 ## ✨ Features
 
 ### 🔐 Authentication
-```bash
+
 - User registration and login
 - JWT token-based authentication
 - Role-based access control (Admin/User)

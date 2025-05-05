@@ -93,12 +93,10 @@ export function CreateTaskDialog({ children }: CreateTaskDialogProps) {
       })
     }
   }
-  if(user?.role!="admin"){      
-    return null;
-  }
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog >
+      <DialogTrigger disabled={user?.role!="admin"} asChild>
         {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
@@ -153,7 +151,7 @@ export function CreateTaskDialog({ children }: CreateTaskDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                      {priorities.map((priority)=>(<SelectItem value={priority.value}><priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />{priority.label}</SelectItem>))}
+                      {priorities.map((priority)=>(<SelectItem key={priority.value} value={priority.value}><priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />{priority.label}</SelectItem>))}
                         
                       </SelectContent>
                     </Select>
@@ -175,7 +173,7 @@ export function CreateTaskDialog({ children }: CreateTaskDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {statuses.map((status)=>(<SelectItem value={status.value}><status.icon className="mr-2 h-4 w-4 text-muted-foreground" />{status.label}</SelectItem>))}
+                        {statuses.map((status)=>(<SelectItem key={status.value} value={status.value}><status.icon className="mr-2 h-4 w-4 text-muted-foreground" />{status.label}</SelectItem>))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

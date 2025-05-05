@@ -4,6 +4,7 @@ import { AuthenticatedRequest } from "./user.controller";
 
 export const dashboardChart=async(req:AuthenticatedRequest,res:Response)=>{
   try {
+    
     const tasks = await TaskModel.find().lean();
 
     const statusCounts = tasks.reduce((acc, task) => {
