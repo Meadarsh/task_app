@@ -78,6 +78,7 @@ A full-featured **task management application** built using **Next.js**, **Expre
 
 
 ### Start Backend
+- cd backend
 - npm i
 - npm run dev
 
