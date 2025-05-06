@@ -69,7 +69,7 @@ export function CreateTaskDialog({ children }: CreateTaskDialogProps) {
                 setUsers(resp.data)
             }
         } catch (error) {
-            console.log("Error while fetching users list");
+            console.log(error,"Error while fetching users list");
             
         }
     }

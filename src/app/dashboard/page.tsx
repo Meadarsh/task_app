@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { TaskStatusChart } from './components/statusChart'
 import { TaskPriorityChart } from './components/priorityChart'
 
-const page = () => {
+const Page = () => {
     const [data,setData]=useState<any>()
     const getDashboardData = async()=>{
         try {
@@ -25,4 +25,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

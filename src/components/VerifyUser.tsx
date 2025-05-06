@@ -44,7 +44,7 @@ const Verify = () => {
     };
 
     verifyToken();
-  }, [currentPath]);
+  },[currentPath,router,setUser]);
 
   if (loading) {
     return (

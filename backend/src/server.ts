@@ -18,6 +18,7 @@ connectDB();
 app.use(
   cors({
     origin: [
+      "https://taskapp-stamurai.amiigo.in",
       "http://localhost:3000",
       "http://localhost:3001",
       "http://localhost:3002",
@@ -50,7 +51,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 const server = http.createServer(app);
 export const io = new Server(server,{
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000","https://taskapp-stamurai.amiigo.in"],
     methods: ["GET", "POST"],
     credentials: true
   },

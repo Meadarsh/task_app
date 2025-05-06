@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
+  Row,
   SortingState,
   VisibilityState,
   flexRender,
@@ -41,6 +42,102 @@ import { toast } from "@/components/ui/use-toast";
 import useAuthStore from "@/app/store/user.state";
 import { cn } from "@/lib/utils";
 
+const StatusCell = ({ row, statuses }: { row: Row<Task>; statuses:any }) => {
+  const [value, setValue] = useState(row.getValue("status") as string);
+  
+  const handleChange = async (newValue: string) => {
+    try {
+      await updateTask(row.original._id, { status: newValue });
+      row.toggleSelected(false);
+      toast({
+        variant: "success",
+        description: `Status updated successfully. (${row.getValue("status")} -> ${newValue})`
+      });
+    } catch (error) {
+      console.error("Failed to update status:", error);
+      setValue(row.getValue("status"));
+    }
+  };
+
+  const status = statuses.find((status) => status.value === value);
+  if (!status) return null;
+
+  return (
+    <Select
+    value={value}
+    onValueChange={handleChange}
+  >
+    <SelectTrigger className="min-w-[80px]">
+      <SelectValue placeholder="Select status" />
+    </SelectTrigger>
+    <SelectContent>
+      {statuses.map((status:any) => (
+        <SelectItem key={status.value} value={status.value}>
+          <div style={{color:status?.color}} className={cn("flex items-center")}>
+            {status.icon && (
+              <status.icon className="mr-2 h-4 w-4 text-inherit" />
+            )}
+            {status.label}
+          </div>
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+  );
+};
+
+const PriorityCell = ({ row, priorities, user }: { 
+  row: Row<Task>; 
+  priorities:any;
+  user: any | null;
+}) => {
+  const [value, setValue] = useState(row.getValue("priority") as string);
+
+  const handleChange = async (newValue: string) => {
+    try {
+      await updateTask(row.original._id, { priority: newValue });
+      row.toggleSelected(false);
+      toast({
+        variant: "success",
+        description: `Priority updated successfully. (${row.getValue("priority")} -> ${newValue})`
+      });
+    } catch (error) {
+      console.error("Failed to update priority:", error);
+      setValue(row.getValue("priority"));
+    }
+  };
+
+  const priority = priorities.find((priority) => priority.value === value);
+  if (!priority) return null;
+  
+  if (user?.role === "standard") {
+    return <span>{value}</span>;
+  }
+
+  return (
+    <Select
+            value={value}
+            onValueChange={handleChange}
+          >
+            <SelectTrigger className="min-w-[80px]">
+              <SelectValue placeholder="Select priority" />
+            </SelectTrigger>
+            <SelectContent>
+              {priorities.map((priority) => (
+                <SelectItem key={priority.value} value={priority.value}>
+                  <div className="flex items-center">
+                    {priority.icon && (
+                      <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                    )}
+                    {priority.label}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+  );
+};
+
 export function DataTable() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [data, setData] = React.useState([]);
@@ -72,8 +169,8 @@ export function DataTable() {
       header: ({ table }) => (
         <Checkbox
           checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
+            !!table.getIsAllPageRowsSelected() ||
+            !!(table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
@@ -112,45 +209,7 @@ export function DataTable() {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Status" />
       ),
-      cell: ({ row }) => {
-        const [value, setValue] = useState(row.getValue("status")as string)
-        const handleChange = async (newValue: string) => {
-          try {
-            await updateTask(row.original._id, { status: newValue })
-            row.toggleSelected(false)
-            toast({variant:"success",description:`Status updated successfully.  (${row.getValue("status")} -> ${newValue})`})
-            GetTasks()
-          } catch (error) {
-            console.error("Failed to update status:", error)
-            setValue(row.getValue("status")) 
-          }
-        }
-  
-        const status = statuses.find((status) => status.value === value)
-  
-        if (!status) return null
-  
-        return (
-          <Select
-            value={value}
-            onValueChange={handleChange}
-          >
-            <SelectTrigger className="min-w-[80px]">
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              {statuses.map((status) => (
-                <SelectItem key={status.value} value={status.value}>
-                  <div style={{color:status?.color}} className={cn("flex items-center")}>
-                    {status.icon && (
-                      <status.icon className="mr-2 h-4 w-4 text-inherit" />
-                    )}
-                    {status.label}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>)},
+      cell: ({ row }) => <StatusCell row={row} statuses={statuses} />,
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id))
       },
@@ -160,50 +219,7 @@ export function DataTable() {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Priority" />
       ),
-      cell: ({ row }) => {
-        const [value, setValue] = useState(row.getValue("priority")as string)
-  
-        const handleChange = async (newValue: string) => {
-          try {
-            await updateTask(row.original._id, { priority: newValue })
-            row.toggleSelected(false)
-            toast({variant:"success",description:`Priority updated successfully. (${row.getValue("priority")} -> ${newValue})`})
-            GetTasks()
-          } catch (error) {
-            console.error("Failed to update priority:", error)
-            setValue(row.getValue("priority")) 
-          }
-        }
-  
-        const priority = priorities.find((priority) => priority.value === value)
-  
-        if (!priority) return null
-        if(user?.role=="standard"){
-          return <span>{value}</span>
-        }
-        return (
-          <Select
-            value={value}
-            onValueChange={handleChange}
-          >
-            <SelectTrigger className="min-w-[80px]">
-              <SelectValue placeholder="Select priority" />
-            </SelectTrigger>
-            <SelectContent>
-              {priorities.map((priority) => (
-                <SelectItem key={priority.value} value={priority.value}>
-                  <div className="flex items-center">
-                    {priority.icon && (
-                      <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    {priority.label}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )
-      },
+      cell: ({ row }) => (<PriorityCell row={row} priorities={priorities} user={user} />),
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id))
       },
