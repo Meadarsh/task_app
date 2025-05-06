@@ -8,6 +8,7 @@ export const loginSchema = z.object({
 export const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
+  role: z.string().min(4,'Select a role'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -20,7 +21,7 @@ export const taskSchema = z.object({
   description: z.string().optional(),
   dueDate: z.coerce.date().min(new Date(), "Due date must be in the future"),
   priority: z.enum(["low", "medium", "high"]),
-  status: z.enum(["todo", "in-progress", "done", "archived"]),
+  status: z.enum(["todo", "in progress", "done", "archived"]),
   assignee: z.string().min(6,"Invalid assignee ID"),
 });
 

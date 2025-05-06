@@ -39,6 +39,7 @@ import { useState } from "react"
 import { updateTask } from "./updateTask"
 import { toast } from "@/components/ui/use-toast";
 import useAuthStore from "@/app/store/user.state";
+import { cn } from "@/lib/utils";
 
 export function DataTable() {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -140,9 +141,9 @@ export function DataTable() {
             <SelectContent>
               {statuses.map((status) => (
                 <SelectItem key={status.value} value={status.value}>
-                  <div className="flex items-center">
+                  <div style={{color:status?.color}} className={cn("flex items-center")}>
                     {status.icon && (
-                      <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <status.icon className="mr-2 h-4 w-4 text-inherit" />
                     )}
                     {status.label}
                   </div>

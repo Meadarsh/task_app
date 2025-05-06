@@ -10,6 +10,13 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function RegisterForm({
   className,
@@ -20,6 +27,8 @@ export function RegisterForm({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
+    watch,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
@@ -30,6 +39,7 @@ export function RegisterForm({
         name: data.name,
         email: data.email,
         password: data.password,
+        role: data.role,
       });
   
       // Verify successful response
@@ -110,6 +120,24 @@ export function RegisterForm({
           />
           {errors.confirmPassword && (
             <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
+          )}
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="role">Role</Label>
+          <Select
+            onValueChange={(value) => setValue("role", value as "admin" | "standard")}
+            value={watch("role")}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="standard">Standard User</SelectItem>
+              <SelectItem value="admin">Admin</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.role && (
+            <p className="text-sm text-red-500">{errors.role.message}</p>
           )}
         </div>
         <Button type="submit" className="w-full" disabled={isSubmitting}>

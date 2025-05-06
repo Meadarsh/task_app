@@ -5,7 +5,14 @@ import { AuthenticatedRequest } from "./user.controller";
 export const dashboardChart=async(req:AuthenticatedRequest,res:Response)=>{
   try {
     
-    const tasks = await TaskModel.find().lean();
+    let filter={}
+    if(req.user.role=="admin"){
+      filter={createdBy:req.user._id}
+    }else{
+      filter={assignee:req.user._id}
+    }
+
+    const tasks = await TaskModel.find(filter).lean();
 
     const statusCounts = tasks.reduce((acc, task) => {
       acc[task.status] = (acc[task.status] || 0) + 1;
