@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:4005/api', 
+  baseURL: 'https://taskapp-stamurai-api.amiigo.in/api', 
   headers: {
     'Content-Type': 'application/json',
   },
