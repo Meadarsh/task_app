@@ -51,9 +51,6 @@ export function NotificationPanel() {
   }
 
   useEffect(() => {
-    GetNotifications()
-  }, [])
-  useEffect(() => {
     if(open){GetNotifications()}
   }, [open])
 
@@ -79,7 +76,6 @@ export function NotificationPanel() {
 
   useEffect(() => {
     if (!user?._id) return;
-    socket.connect();
     socket.emit('authenticate',user?._id);
     socket.on('new-notification', (notification: Notification) => {
     playNotificationSound();

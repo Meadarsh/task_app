@@ -278,7 +278,7 @@ export function DataTable() {
 
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 lg:w-full w-[95vw]">
       <DataTableToolbar table={table} />
       <div className="rounded-md  border">
         <Table>

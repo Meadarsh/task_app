@@ -73,7 +73,7 @@ export function CreateTaskDialog({ children }: CreateTaskDialogProps) {
             
         }
     }
-    GetUser()
+   if(open){ GetUser()}
   },[open])
 
   async function onSubmit(values: z.infer<typeof taskSchema>) {
