@@ -42,17 +42,18 @@ import { toast } from "@/components/ui/use-toast";
 import useAuthStore from "@/app/store/user.state";
 import { cn } from "@/lib/utils";
 
-const StatusCell = ({ row, statuses }: { row: Row<Task>; statuses:any }) => {
+const StatusCell = ({refreshData, row, statuses }: {refreshData:any; row: Row<Task>; statuses:any }) => {
   const [value, setValue] = useState(row.getValue("status") as string);
   
   const handleChange = async (newValue: string) => {
     try {
       await updateTask(row.original._id, { status: newValue });
       row.toggleSelected(false);
+      await refreshData()
       toast({
         variant: "success",
         description: `Status updated successfully. (${row.getValue("status")} -> ${newValue})`
-      });
+      }); 
     } catch (error) {
       console.error("Failed to update status:", error);
       setValue(row.getValue("status"));
@@ -86,9 +87,10 @@ const StatusCell = ({ row, statuses }: { row: Row<Task>; statuses:any }) => {
   );
 };
 
-const PriorityCell = ({ row, priorities, user }: { 
+const PriorityCell = ({ row,refreshData, priorities, user }: { 
   row: Row<Task>; 
   priorities:any;
+  refreshData:any;
   user: any | null;
 }) => {
   const [value, setValue] = useState(row.getValue("priority") as string);
@@ -97,6 +99,7 @@ const PriorityCell = ({ row, priorities, user }: {
     try {
       await updateTask(row.original._id, { priority: newValue });
       row.toggleSelected(false);
+      await refreshData()
       toast({
         variant: "success",
         description: `Priority updated successfully. (${row.getValue("priority")} -> ${newValue})`
@@ -157,7 +160,7 @@ export function DataTable() {
       console.log(error);
     }
   };
-
+  const refreshData = React.useCallback(() => GetTasks(), []);
   React.useEffect(() => {
     GetTasks();
   }, []);
@@ -207,9 +210,9 @@ export function DataTable() {
     {
       accessorKey: "status",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
+        <DataTableColumnHeader  column={column} title="Status" />
       ),
-      cell: ({ row }) => <StatusCell row={row} statuses={statuses} />,
+      cell: ({ row }) => <StatusCell refreshData={()=>GetTasks()} row={row} statuses={statuses} />,
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id))
       },
@@ -219,7 +222,7 @@ export function DataTable() {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Priority" />
       ),
-      cell: ({ row }) => (<PriorityCell row={row} priorities={priorities} user={user} />),
+      cell: ({ row }) => (<PriorityCell refreshData={()=>GetTasks()} row={row} priorities={priorities} user={user} />),
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id))
       },
