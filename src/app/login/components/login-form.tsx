@@ -30,14 +30,15 @@ export function LoginForm({
       const response = await api.post("/users/login", data);
       if (!response.data?.token) {
         throw new Error("Invalid response from server");
-      }
+      }else{
       localStorage.setItem("token", response.data.token);
       toast({
         title: "Login successful",
         description: "You have been logged in successfully",
       });
-      router.push("/dashboard");
+      router.push("/dashboard");}
     } catch (error:any) {
+      console.log(error);
       toast({
         title: "Login failed",
         description: error.response?.data?.message || "An error occurred",

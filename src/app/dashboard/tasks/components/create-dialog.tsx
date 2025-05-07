@@ -46,7 +46,7 @@ interface CreateTaskDialogProps {
 export function CreateTaskDialog({ children }: CreateTaskDialogProps) {
   const { toast } = useToast()
   const {user}=useAuthStore()
-   
+  const [open,setOpen]=useState(false)
   const[users,setUsers]=useState([])
 
   const form = useForm<z.infer<typeof taskSchema>>({
@@ -74,7 +74,7 @@ export function CreateTaskDialog({ children }: CreateTaskDialogProps) {
         }
     }
     GetUser()
-  },[])
+  },[open])
 
   async function onSubmit(values: z.infer<typeof taskSchema>) {
     try {
@@ -95,7 +95,7 @@ export function CreateTaskDialog({ children }: CreateTaskDialogProps) {
   }
 
   return (
-    <Dialog >
+    <Dialog onOpenChange={setOpen} >
       <DialogTrigger disabled={user?.role!="admin"} asChild>
         {children}
       </DialogTrigger>
